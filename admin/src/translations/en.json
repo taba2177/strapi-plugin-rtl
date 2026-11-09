@@ -18,5 +18,6 @@
   "config.default": "Strapi default",
   "howto.title": "How to configure",
   "value.on": "On",
-  "value.off": "Off"
+  "value.off": "Off",
+  "plugin.description": "Right-to-left admin panel and RTL content editing for Arabic, Hebrew, Persian, Urdu and other RTL languages."
 }

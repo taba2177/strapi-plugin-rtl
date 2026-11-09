@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-rtl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Right-to-left (RTL) support for the Strapi 5 admin panel: mirrored interface for Arabic, Hebrew, Persian, Urdu and other RTL languages, and RTL content editing for RTL locales.",
   "keywords": [
     "strapi",

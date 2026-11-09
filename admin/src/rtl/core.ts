@@ -74,6 +74,48 @@ export interface StyleLike {
   getPropertyPriority(prop: string): string;
 }
 
+/** -50% → 50%, 12px → -12px, 0 → 0, calc(…) → calc(-1 * (…)). */
+export function negateLength(v: string): string {
+  const t = v.trim();
+  if (/^-?0(\.0+)?([a-z%]+)?$/i.test(t)) return t;
+  if (t.startsWith('-')) return t.slice(1);
+  if (/^(calc|var|min|max|clamp)\(/i.test(t)) return `calc(-1 * ${t})`;
+  return `-${t}`;
+}
+
+/** Split a CSS function's arguments on top-level commas (calc() may contain commas). */
+function splitArgs(args: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let cur = '';
+  for (const ch of args) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) {
+      out.push(cur);
+      cur = '';
+    } else cur += ch;
+  }
+  out.push(cur);
+  return out.map((a) => a.trim());
+}
+
+/**
+ * Mirror the horizontal part of translate functions:
+ * translate(-50%, -50%) → translate(50%, -50%), translateX(8px) → translateX(-8px).
+ * Needed with a swapped `left`/`right`: Strapi centres dialogs with
+ * `left: 50%; transform: translate(-50%, -50%)`, which mirrors to
+ * `right: 50%; transform: translate(50%, -50%)`.
+ */
+export function mirrorTranslate(transform: string): string {
+  return transform.replace(/\b(translate3d|translateX|translate)\(((?:[^()]|\([^()]*\))*)\)/gi, (whole, fn: string, args: string) => {
+    const parts = splitArgs(args);
+    if (!parts[0]) return whole;
+    parts[0] = negateLength(parts[0]);
+    return `${fn}(${parts.join(', ')})`;
+  });
+}
+
 const flipKeyword = (v: string) => v.replace(/\b(left|right)\b/g, (w) => (w === 'left' ? 'right' : 'left'));
 
 /**
@@ -96,6 +138,16 @@ export function mirrorDeclarations(style: StyleLike): { ltr: Declarations; rtl: 
     ltr[b] = [vb, pb];
     rtl[a] = [vb, pb];
     rtl[b] = [va, pa];
+  }
+  // a swapped left/right offset takes the horizontal translate with it (centred dialogs, popovers)
+  if (ltr.left || ltr.right) {
+    const t = style.getPropertyValue('transform');
+    const mirroredT = t ? mirrorTranslate(t) : t;
+    if (t && mirroredT !== t) {
+      const p = style.getPropertyPriority('transform');
+      ltr.transform = [t, p];
+      rtl.transform = [mirroredT, p];
+    }
   }
   for (const prop of SWAP_KEYWORD_PROPS) {
     const v = style.getPropertyValue(prop);

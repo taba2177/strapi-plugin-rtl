@@ -57,6 +57,9 @@ const plugin: StrapiApp['appPlugins'][string] = {
           };
           const prefixed: Record<string, string> = {};
           for (const key of Object.keys(data)) prefixed[getTranslation(key)] = data[key];
+          // name and description on Settings → Plugins
+          if (data['plugin.name']) prefixed[`global.plugins.${PLUGIN_ID}`] = data['plugin.name'];
+          if (data['plugin.description']) prefixed[`global.plugins.${PLUGIN_ID}.description`] = data['plugin.description'];
           return { data: prefixed, locale };
         } catch {
           return { data: {}, locale };

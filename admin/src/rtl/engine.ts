@@ -277,8 +277,18 @@ export function install(initial: Partial<RtlSettings> = {}) {
   window.addEventListener('popstate', sync);
   // …and when the interface language changes (Strapi updates <html lang>).
   new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  // New views add new style rules and "Back" links (batched to one pass per frame).
+  // New views add new "Back" links and new style rules (batched to one pass per frame).
   new MutationObserver(scheduleScan).observe(document.body, { childList: true, subtree: true });
+  // Style rules often arrive after the last DOM change of a view, so watch them directly:
+  // styled-components appends text to <style> tags in development…
+  new MutationObserver(scheduleScan).observe(document.head, { childList: true, subtree: true, characterData: true });
+  // …and calls insertRule() in production, which no observer sees.
+  const insertRule = CSSStyleSheet.prototype.insertRule;
+  CSSStyleSheet.prototype.insertRule = function patchedInsertRule(this: CSSStyleSheet, rule: string, index?: number) {
+    const result = insertRule.call(this, rule, index);
+    if (mirroring) scheduleScan();
+    return result;
+  };
 
   sync();
   scheduleScan();
