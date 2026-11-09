@@ -1,0 +1,22 @@
+{
+  "plugin.name": "RTL support",
+  "settings.link": "RTL support",
+  "settings.title": "RTL support",
+  "settings.subtitle": "Right-to-left admin panel and content editing. Configured in config/plugins.",
+  "status.title": "Current status",
+  "status.interface": "Interface language",
+  "status.content": "Content locale",
+  "status.none": "not editing content",
+  "status.hint": "Change the interface language in your profile; the content locale follows the locale picker of the edit view.",
+  "config.title": "Configuration",
+  "config.interface": "Mirror RTL interface",
+  "config.content": "RTL content fields",
+  "config.mirrorStyles": "Mirror left/right styles",
+  "config.rtlLocales": "RTL languages",
+  "config.ltrFields": "Extra LTR fields",
+  "config.fontFamily": "RTL font",
+  "config.default": "Strapi default",
+  "howto.title": "How to configure",
+  "value.on": "On",
+  "value.off": "Off"
+}

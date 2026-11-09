@@ -1,0 +1,22 @@
+{
+  "plugin.name": "دعم الكتابة من اليمين إلى اليسار",
+  "settings.link": "دعم RTL",
+  "settings.title": "دعم الكتابة من اليمين إلى اليسار",
+  "settings.subtitle": "لوحة تحكم وتحرير محتوى من اليمين إلى اليسار. تُضبط الإعدادات في config/plugins.",
+  "status.title": "الحالة الحالية",
+  "status.interface": "لغة الواجهة",
+  "status.content": "لغة المحتوى",
+  "status.none": "لا يتم تحرير محتوى",
+  "status.hint": "غيّر لغة الواجهة من ملفك الشخصي، وتتبع لغة المحتوى اختيار اللغة في شاشة التعديل.",
+  "config.title": "الإعدادات",
+  "config.interface": "عكس الواجهة للغات RTL",
+  "config.content": "حقول المحتوى من اليمين لليسار",
+  "config.mirrorStyles": "عكس اتجاه التنسيقات (يمين/يسار)",
+  "config.rtlLocales": "لغات RTL",
+  "config.ltrFields": "حقول إضافية تبقى LTR",
+  "config.fontFamily": "خط الواجهة",
+  "config.default": "خط Strapi الافتراضي",
+  "howto.title": "طريقة الإعداد",
+  "value.on": "مفعّل",
+  "value.off": "معطّل"
+}
